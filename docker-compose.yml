@@ -1,0 +1,11 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    container_name: guide_mysql
+    volumes:
+      - ~/db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
