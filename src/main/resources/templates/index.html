@@ -9,6 +9,8 @@
     <title>nihao</title>
 </head>
 <body>
-    shijie
+<tr th:each="category : ${categories}">
+    <td th:text="${category.name }">Onions</td>
+</tr>
 </body>
 </html>

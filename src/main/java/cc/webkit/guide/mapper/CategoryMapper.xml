@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.javaboy.vhr.mapper.DepartmentMapper">
+
+    <resultMap id="BaseResultMap" type="cc.webkit.guide.model.Category">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="all" type="cc.webkit.guide.model.Category" extends="BaseResultMap">
+        <collection property="children" ofType="cc.webkit.guide.model.Category"
+            select="cc.webkit.guide.mapper.CategoryMapper.getAll"
+            column="id"/>
+    </resultMap>
+
+    <select id="getAll" resultMap="all">
+        select * from Category
+    </select>
+
+</mapper>
