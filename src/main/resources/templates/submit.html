@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="fragment/header"></head>
+
+<body>
+
+<nav th:insert="fragment/nav"></nav>
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">提交网址</h3>
+        </div>
+        <div class="panel-body">
+            <!--登录表单-->
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">分类</label>
+                    <div class="col-sm-6">
+                        <select name="category_id" class="form-control">
+                            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">链接</label>
+                    <div class="col-sm-6">
+                        <input type="text" name="url" class="form-control" placeholder="链接">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">名称</label>
+                    <div class="col-sm-6">
+                        <input type="text" name="name" class="form-control" placeholder="名称">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">描述</label>
+                    <div class="col-sm-6">
+                        <input type="text" name="desc" class="form-control" placeholder="简单描述">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-2">
+                        <button type="submit" id="submit" class="btn btn-default" data-loading-text="提交中，请稍后">提交</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div th:insert="fragment/modal"></div>
+
+<script>
+    $(function () {
+        $("#submit").click(function (e) {
+            e.preventDefault()
+            let  category_id = $("select[name=category_id]").val()
+            let  url = $("input[name=url]").val()
+            let  name = $("input[name=name]").val()
+            let  desc = $("input[name=desc]").val()
+            if (!category_id || !url || !name || !desc ){
+                $(".modal-body").text("请填写完整信息")
+                $('#myModal').modal();
+                return;
+            }
+            let btn = $(this).button('loading')
+            $.post("/submit",{ category_id,url,name,desc},function (response) {
+                response = JSON.parse(response)
+
+                $(".modal-body").text(response.msg)
+                $('#myModal').modal();
+
+                if (response.status == 0 ){
+                    setTimeout(function () {
+                        window.location.reload();
+                    },800)
+                }
+            })
+        })
+    })
+</script>
+</body>
+</html>
