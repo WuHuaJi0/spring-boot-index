@@ -1,7 +1,13 @@
 package cc.webkit.guide.controller;
 
+import cc.webkit.guide.model.Resp;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
@@ -11,33 +17,16 @@ public class LoginController {
         return "login";
     }
 
-    @PostMapping("/login")
     @ResponseBody
-    public String doLogin(@RequestParam("username") String username,@RequestParam("password") String password){
+    @PostMapping("/login")
+    public String doLogin(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletRequest request, HttpSession session) throws JsonProcessingException {
         // todo: 校验用户名密码是否正确
-        return "username" + username + "password" + password;
+        session.setAttribute("user","admin");
+        ObjectMapper mapper = new ObjectMapper();
+
+        // todo: 这里要返回 conte-type: json，方便前端使用
+        return mapper.writeValueAsString(new Resp(0,"登录成功"));
     }
-
-
-
-//    @RequestMapping("/test/cookie")
-//    public String cookie(@RequestParam("browser") String browser, HttpServletRequest request, HttpSession session) {
-//        //取出session中的browser
-//        Object sessionBrowser = session.getAttribute("browser");
-//        if (sessionBrowser == null) {
-//            System.out.println("不存在session，设置browser=" + browser);
-//            session.setAttribute("browser", browser);
-//        } else {
-//            System.out.println("存在session，browser=" + sessionBrowser.toString());
-//        }
-//        Cookie[] cookies = request.getCookies();
-//        if (cookies != null && cookies.length > 0) {
-//            for (Cookie cookie : cookies) {
-//                System.out.println(cookie.getName() + " : " + cookie.getValue());
-//            }
-//        }
-//        return "index";
-//    }
 
 
     @GetMapping("/logout")

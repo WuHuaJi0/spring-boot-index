@@ -72,7 +72,13 @@
             }
             let btn = $(this).button('loading')
             $.post("/login",{username,password},function (response) {
-                // $btn.button('reset')
+                response = JSON.parse(response)
+                if (response.status == 0 ){
+                    window.location.href = "/"
+                }else{
+                    $(".modal-body").text(response.msg)
+                    $('#myModal').modal();
+                }
             })
         })
     })
