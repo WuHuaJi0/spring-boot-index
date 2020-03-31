@@ -1,5 +1,7 @@
 package cc.webkit.guide.controller;
 
+import cc.webkit.guide.mapper.AdminMapper;
+import cc.webkit.guide.model.Admin;
 import cc.webkit.guide.model.Resp;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class LoginController {
@@ -26,12 +30,19 @@ public class LoginController {
     @ResponseBody
     @PostMapping("/login")
     public String doLogin(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletRequest request, HttpSession session) throws JsonProcessingException {
-        // todo: 校验用户名密码是否正确
-        session.setAttribute("user","admin");
-        ObjectMapper mapper = new ObjectMapper();
+        String sql = "select * from admin where username='" + username +"' and password = '" + password + "'";
+        System.out.println(sql);
+        List<Map<String, Object>> admins = jdbcTemplate.queryForList(sql);
 
-        // todo: 这里要返回 conte-type: json，方便前端使用
-        return mapper.writeValueAsString(new Resp(0,"登录成功"));
+        ObjectMapper mapper = new ObjectMapper();
+        if (admins.size() == 0 ) {
+            // todo: 这里要返回 conte-type: json，方便前端使用
+            return mapper.writeValueAsString(new Resp(-1, "用户名密码错误"));
+        } else {
+            session.setAttribute("user", admins.get(0).get("username"));
+            return mapper.writeValueAsString(new Resp(0, "登录成功"));
+        }
+
     }
 
 
