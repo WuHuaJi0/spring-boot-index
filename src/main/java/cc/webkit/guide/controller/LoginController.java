@@ -17,6 +17,7 @@ public class LoginController {
         return "login";
     }
 
+
     @ResponseBody
     @PostMapping("/login")
     public String doLogin(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletRequest request, HttpSession session) throws JsonProcessingException {
@@ -28,9 +29,9 @@ public class LoginController {
         return mapper.writeValueAsString(new Resp(0,"登录成功"));
     }
 
-
     @GetMapping("/logout")
-    public String logout(){
-        return "logout";
+    public String logout(HttpSession session) throws JsonProcessingException {
+        session.removeAttribute("user");
+        return "redirect:/";
     }
 }
