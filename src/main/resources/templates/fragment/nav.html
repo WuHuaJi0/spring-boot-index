@@ -20,7 +20,10 @@
                 <li><a href="/submit">提交网址</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/login">登录</a></li>
+                <li>
+                    <a href="##" th:if="${session.user != null }" th:text="'你好，'+${session.user}"></a>
+                    <a th:if="${session.user == null}" href="/login">登录</a>
+                </li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
