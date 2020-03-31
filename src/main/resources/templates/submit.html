@@ -70,6 +70,7 @@
             }
             let btn = $(this).button('loading')
             $.post("/submit",{ category_id,url,name,desc},function (response) {
+                btn.button('reset')
                 response = JSON.parse(response)
 
                 $(".modal-body").text(response.msg)

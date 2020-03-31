@@ -54,6 +54,7 @@
             let btn = $(this).button('loading')
             $.post("/login",{username,password},function (response) {
                 response = JSON.parse(response)
+                btn.button('reset')
                 if (response.status == 0 ){
                     window.location.href = "/"
                 }else{
