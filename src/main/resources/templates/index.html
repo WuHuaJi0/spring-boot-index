@@ -8,9 +8,17 @@
 
 <!--渲染列表-->
 <div class="container">
-    <tr th:each="category : ${categories}">
-        <td th:text="${category.name }">Onions</td>
-    </tr>
+    <div th:each="category : ${categories}" class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title" th:text="${category.name }"></h3>
+        </div>
+        <div class="panel-body">
+            <a target="_blank" th:href="${url.url}" th:each="url : ${category.urls}" class="col-xs-4 col-sm-3 col-md-2 url-container">
+                <p class="title" th:text="${url.name}"></p>
+                <p class="desc" th:text="${url.desc}"></p>
+            </a>
+        </div>
+    </div>
 </div>
 
 </body>
