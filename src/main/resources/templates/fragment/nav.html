@@ -16,8 +16,13 @@
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/">首页 <span class="sr-only"></span></a></li>
-                <li class=""><a href="/submit">提交网址</a></li>
+                <li th:classappend="${#httpServletRequest.getRequestURI() == '/' } ? 'active': ''" th:abbr="${#httpServletRequest.requestURL}">
+                    <a href="/">首页 <span class="sr-only"></span></a>
+                </li>
+
+                <li th:classappend="${#httpServletRequest.getRequestURI() == '/submit' } ? 'active': ''">
+                    <a href="/submit">提交网址</a>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li th:if="${session.user != null }">
@@ -27,10 +32,11 @@
                     <a href="/logout" th:if="${session.user != null }">注销</a>
                 </li>
 
-                <li th:if="${session.user == null}">
+                <li th:if="${session.user == null}" th:classappend="${#httpServletRequest.getRequestURI() == '/login' } ? 'active': ''">
                     <a  href="/login">登录</a>
                 </li>
-                <li th:if="${session.user == null}">
+
+                <li th:if="${session.user == null}" th:classappend="${#httpServletRequest.getRequestURI() == '/register' } ? 'active': ''">
                     <a  href="/register">注册</a>
                 </li>
             </ul>
