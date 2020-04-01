@@ -41,7 +41,7 @@ public class HomeController {
     @ResponseBody
     @PostMapping("/submit")
     public String doSubmit(@RequestParam Map<String,Object> params) throws JsonProcessingException {
-        String sql = "INSERT INTO `url` (`name`, `category_id`, `ursl`,`desc`) VALUES (?, ?, ?,?);";
+        String sql = "INSERT INTO `url` (`name`, `category_id`, `url`,`desc`) VALUES (?, ?, ?,?);";
         int result = jdbcTemplate.update(sql,params.get("name"),params.get("category_id"),params.get("url"),params.get("desc"));
         ObjectMapper mapper = new ObjectMapper();
 

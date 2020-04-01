@@ -8,7 +8,6 @@
 
 <!--渲染列表-->
 <div class="container">
-    <p>hello world</p>
     <div th:each="category : ${categories}" class="panel panel-success">
         <div class="panel-heading">
             <h3 class="panel-title" th:text="${category.name }"></h3>
