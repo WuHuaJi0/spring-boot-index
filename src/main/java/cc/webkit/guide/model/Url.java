@@ -1,9 +1,6 @@
 package cc.webkit.guide.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Url {
@@ -12,27 +9,29 @@ public class Url {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String username;
+    private String name;
     private String url;
+
     private long categoryId;
-    private String desc;
+    private String description;
 
+    protected Url() {
 
-    protected Url() { }
+    }
 
-    public Url(String username, String url, long categoryId, String desc) {
-        this.username = username;
+    public Url(String name, String url, long categoryId, String description) {
+        this.name = name;
         this.url = url;
         this.categoryId = categoryId;
-        this.desc = desc;
+        this.description = description;
     }
 
     public long getId() {
         return id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
     public String getUrl() {
@@ -43,8 +42,7 @@ public class Url {
         return categoryId;
     }
 
-
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 }

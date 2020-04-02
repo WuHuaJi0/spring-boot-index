@@ -38,7 +38,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">描述</label>
                     <div class="col-sm-6">
-                        <input type="text" name="desc" class="form-control" placeholder="简单描述">
+                        <input type="text" name="description" class="form-control" placeholder="简单描述">
                     </div>
                 </div>
 
@@ -62,14 +62,14 @@
             let  categoryId = $("select[name=categoryId]").val()
             let  url = $("input[name=url]").val()
             let  name = $("input[name=name]").val()
-            let  desc = $("input[name=desc]").val()
-            if (!categoryId || !url || !name || !desc ){
+            let  description = $("input[name=description]").val()
+            if (!categoryId || !url || !name || !description ){
                 $(".modal-body").text("请填写完整信息")
                 $('#myModal').modal();
                 return;
             }
             let btn = $(this).button('loading')
-            $.post("/submit",{ categoryId,url,name,desc},function (response) {
+            $.post("/submit",{ categoryId,url,name,description},function (response) {
                 btn.button('reset')
                 response = JSON.parse(response)
 

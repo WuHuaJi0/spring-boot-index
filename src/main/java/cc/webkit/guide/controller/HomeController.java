@@ -26,10 +26,10 @@ public class HomeController {
 
     @RequestMapping("/")
     public String hello(Model model){
-        List<Map<String, Object>> categories = jdbcTemplate.queryForList("select * from category");
+        List<Map<String, Object>> categories = jdbcTemplate.queryForList("select * from Category");
         List<Map<String, Object>> result = new ArrayList<>();
         for (Map<String,Object> category : categories){
-            category.put("urls",jdbcTemplate.queryForList("select * from url where categoryId = " + category.get("id")));
+            category.put("urls",jdbcTemplate.queryForList("select * from Url where categoryId = " + category.get("id")));
             result.add(category);
         }
         model.addAttribute("categories",result);
@@ -38,7 +38,7 @@ public class HomeController {
 
     @GetMapping("/submit")
     public String submit(Model model){
-        List<Map<String, Object>> categories = jdbcTemplate.queryForList("select * from category");
+        List<Map<String, Object>> categories = jdbcTemplate.queryForList("select * from Category");
         model.addAttribute("categories",categories);
         return "submit";
     }
@@ -48,9 +48,10 @@ public class HomeController {
     public String doSubmit(@RequestParam Map<String,Object> params) throws JsonProcessingException {
         String name = (String) params.get("name");
         String url = (String) params.get("url");
-        String desc = (String) params.get("desc");
-        long categoryID = (long) params.get("categoryId");
-        Url u = urlRepository.save(new Url(name,url,categoryID,desc));
+        String description = (String) params.get("description");
+        long categoryID = Long.parseLong((String) params.get("categoryId"));
+        Url u = urlRepository.save(new Url(name,url,categoryID,description));
+
         ObjectMapper mapper = new ObjectMapper();
 
         // todo: 这里要返回 conte-type: json，方便前端使用

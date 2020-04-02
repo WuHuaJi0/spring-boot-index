@@ -1,46 +1,28 @@
 package cc.webkit.guide.model;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-import java.util.List;
-import java.util.Map;
-
-@Component
+@Entity
 public class Category {
 
-    private Integer id;
-    private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    public Integer getId() {
+    protected Category() {
+
+    }
+
+    // todo: 自定义构造函数，传参
+//    public Category() {
+//
+//    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "Category{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
-    @Autowired
-    JdbcTemplate jdbcTemplate; //todo: 这里不会自动注入
-
-    public List<Map<String, Object>> getAll(){
-        return jdbcTemplate.queryForList("select * from category");
-    }
 }
