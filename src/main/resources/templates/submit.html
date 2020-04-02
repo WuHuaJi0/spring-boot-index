@@ -18,7 +18,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">分类</label>
                     <div class="col-sm-6">
-                        <select name="category_id" class="form-control">
+                        <select name="categoryId" class="form-control">
                             <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
                         </select>
                     </div>
@@ -59,17 +59,17 @@
     $(function () {
         $("#submit").click(function (e) {
             e.preventDefault()
-            let  category_id = $("select[name=category_id]").val()
+            let  categoryId = $("select[name=categoryId]").val()
             let  url = $("input[name=url]").val()
             let  name = $("input[name=name]").val()
             let  desc = $("input[name=desc]").val()
-            if (!category_id || !url || !name || !desc ){
+            if (!categoryId || !url || !name || !desc ){
                 $(".modal-body").text("请填写完整信息")
                 $('#myModal').modal();
                 return;
             }
             let btn = $(this).button('loading')
-            $.post("/submit",{ category_id,url,name,desc},function (response) {
+            $.post("/submit",{ categoryId,url,name,desc},function (response) {
                 btn.button('reset')
                 response = JSON.parse(response)
 

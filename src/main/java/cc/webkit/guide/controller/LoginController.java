@@ -1,8 +1,8 @@
 package cc.webkit.guide.controller;
 
-import cc.webkit.guide.mapper.AdminMapper;
 import cc.webkit.guide.model.Admin;
 import cc.webkit.guide.model.Resp;
+import cc.webkit.guide.repository.AdminRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +12,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class LoginController {
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    AdminRepository repository;
+
 
     @GetMapping("/login")
     public String login(){
@@ -29,20 +28,18 @@ public class LoginController {
 
     @ResponseBody
     @PostMapping("/login")
-    public String doLogin(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletRequest request, HttpSession session) throws JsonProcessingException {
-        String sql = "select * from admin where username='" + username +"' and password = '" + password + "'";
-        System.out.println(sql);
-        List<Map<String, Object>> admins = jdbcTemplate.queryForList(sql);
+    public String doLogin(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session) throws JsonProcessingException {
 
+        Admin admin = repository.findByUsernameAndPassword(username, password);
         ObjectMapper mapper = new ObjectMapper();
-        if (admins.size() == 0 ) {
+
+        if (admin == null ) {
             // todo: 这里要返回 conte-type: json，方便前端使用
             return mapper.writeValueAsString(new Resp(-1, "用户名密码错误"));
         } else {
-            session.setAttribute("user", admins.get(0).get("username"));
+            session.setAttribute("user", admin.getUsername());
             return mapper.writeValueAsString(new Resp(0, "登录成功"));
         }
-
     }
 
 
@@ -57,13 +54,13 @@ public class LoginController {
     public String doRegister(@RequestParam("username") String username, @RequestParam("password") String password, HttpServletRequest request, HttpSession session) throws JsonProcessingException {
 
         // todo: 密码要加密
-        String sql = "INSERT INTO `admin` (`username`, `password`) VALUES (?, ?);";
-        int result = jdbcTemplate.update(sql,username,password);
+        Admin admin = repository.save(new Admin(username,password));
+
         ObjectMapper mapper = new ObjectMapper();
 
         // todo: 这里要返回 conte-type: json，方便前端使用
-        Resp resp = result > 0 ? new Resp(0,"注册成功") : new Resp(-1,"注册失败");
-        if (result > 0){
+        Resp resp = admin != null ? new Resp(0,"注册成功") : new Resp(-1,"注册失败");
+        if (admin != null){
             session.setAttribute("user",username);
         }
         return mapper.writeValueAsString(resp);
@@ -74,6 +71,5 @@ public class LoginController {
         session.removeAttribute("user");
         return "redirect:/";
     }
-
 
 }
