@@ -3,6 +3,7 @@ package cc.webkit.guide.model;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "Url")
 public class Url {
 
     @Id
@@ -12,12 +13,17 @@ public class Url {
     private String name;
     private String url;
 
+    @Column(name = "categoryId")
     private long categoryId;
+
     private String description;
 
-    protected Url() {
 
-    }
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name="categoryId",nullable = false,insertable = false,updatable = false) //设置在article表中的关联字段(外键)
+    private Category category; //所属作者
+
+    protected Url() {}
 
     public Url(String name, String url, long categoryId, String description) {
         this.name = name;
@@ -25,6 +31,7 @@ public class Url {
         this.categoryId = categoryId;
         this.description = description;
     }
+
 
     public long getId() {
         return id;
